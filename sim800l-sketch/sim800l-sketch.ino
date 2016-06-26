@@ -47,7 +47,7 @@ void sendMessage() {
   SMSGateway.println("AT+CMGF=1");
   delay(100);
   
-  SMSGateway.println("AT+CMGS=\"+48697388869\"");
+  SMSGateway.println("AT+CMGS=\"+48697000000\"");
   delay(100);
   
   SMSGateway.println("Random Message #" + String(random(100)));
