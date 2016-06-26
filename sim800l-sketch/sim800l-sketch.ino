@@ -16,6 +16,7 @@
 static int BAUD_RATE = 9600;
 const byte SIM800L_RX_PIN = 8;
 const byte SIM800L_TX_PIN = 7;
+String incomingData;
 
 SoftwareSerial SMSGateway(SIM800L_RX_PIN, SIM800L_TX_PIN);
 
@@ -27,6 +28,8 @@ void setup()
   Serial.begin(BAUD_RATE);
 
   while(!Serial || !SMSGateway);
+  
+  delay(1000);
 
   Serial.println("Serial gateway ready.");
   
@@ -65,14 +68,47 @@ void incomingCommands() {
       case 's':
         sendMessage();
         break;
+      case 'a':
+        allMessages();
+        break;  
     }
   }
 }
 
 void printOutput() {
   if (SMSGateway.available() > 0) {
-    Serial.write(SMSGateway.read());
+    incomingData = SMSGateway.readString();
+    filterIncomingData(incomingData);
   }  
+}
+
+void filterIncomingData(String data) {
+  if (data.indexOf("+CMT") > 0) {
+    Serial.println("SMS Body: " + getValue(data, '\r', 2));
+  }
+
+  Serial.println(data);
+}
+
+void allMessages() {
+  SMSGateway.println("AT+CMGF=\"ALL\"");
+}
+
+String getValue(String data, char separator, int index)
+{
+  int found = 0;
+  int strIndex[] = { 0, -1 };
+  int maxIndex = data.length() - 1;
+  
+  for(int i=0; i <= maxIndex && found <= index; i++){
+    if(data.charAt(i) == separator || i == maxIndex){
+      found++;
+      strIndex[0] = strIndex[1]+1;
+      strIndex[1] = (i == maxIndex) ? i+1 : i;
+    }
+  }
+  
+  return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
 void loop()
