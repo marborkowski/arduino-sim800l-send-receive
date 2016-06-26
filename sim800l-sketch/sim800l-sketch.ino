@@ -14,8 +14,8 @@
 #include <SoftwareSerial.h>
 
 static int BAUD_RATE = 9600;
-static int SIM800L_RX_PIN = 8;
-static int SIM800L_TX_PIN = 7;
+const byte SIM800L_RX_PIN = 8;
+const byte SIM800L_TX_PIN = 7;
 
 SoftwareSerial SMSGateway(SIM800L_RX_PIN, SIM800L_TX_PIN);
 
