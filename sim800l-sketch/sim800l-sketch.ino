@@ -41,8 +41,12 @@ void setup()
   SMSGateway.write("AT+CSCS=\"GSM\"\r");
   delay(1000);
 
-  Serial.println("Selecting ASCII as a text mode");
+  Serial.println("Selecting ASCII as a text mode.");
   SMSGateway.println("AT+CMGF=1");
+  delay(1000);
+
+  Serial.println("Finding the number of the incoming call.");
+  SMSGateway.println("AT+CLIP=1");
   delay(1000);
 }
 
@@ -85,6 +89,10 @@ void printOutput() {
 void filterIncomingData(String data) {
   if (data.indexOf("+CMT") > 0) {
     Serial.println("SMS Body: " + getValue(data, '\r', 2));
+  } 
+
+  if (data.indexOf("RING") > 0) {
+    SMSGateway.println("ATA");
   }
 
   Serial.println(data);
@@ -107,8 +115,12 @@ String getValue(String data, char separator, int index)
       strIndex[1] = (i == maxIndex) ? i+1 : i;
     }
   }
+
+  String out = data.substring(strIndex[0], strIndex[1]);
+  out.replace("\r", "");
+  out.replace("\n", "");
   
-  return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+  return found > index ? out : "";
 }
 
 void loop()
