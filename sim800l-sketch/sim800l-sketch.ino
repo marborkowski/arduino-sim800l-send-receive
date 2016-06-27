@@ -93,6 +93,12 @@ void filterIncomingData(String data) {
 
   if (data.indexOf("RING") > 0) {
     SMSGateway.println("ATA");
+    delay(5000);
+    SMSGateway.println("ATH");
+  }
+
+  if (data.indexOf("+CLIP") > 0) {
+    Serial.println("Incoming call from: " + getValue(data, '"', 1));
   }
 
   Serial.println(data);
