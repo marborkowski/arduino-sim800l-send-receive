@@ -12,12 +12,14 @@
   * http://www.aliexpress.com/item/1pcs-Smallest-SIM800L-GPRS-GSM-Module-MicroSIM-Card-Core-BOard-Quad-band-TTL-Serial-Port/32664202170.html
   */
 #include <SoftwareSerial.h>
+#include "Mario.h"
 
 static int BAUD_RATE = 9600;
 const byte SIM800L_RX_PIN = 8;
 const byte SIM800L_TX_PIN = 7;
 String incomingData;
 
+Mario mario(3);
 SoftwareSerial SMSGateway(SIM800L_RX_PIN, SIM800L_TX_PIN);
 
 void setup()
@@ -91,14 +93,14 @@ void filterIncomingData(String data) {
     Serial.println("SMS Body: " + getValue(data, '\r', 2));
   } 
 
-  if (data.indexOf("RING") > 0) {
-    SMSGateway.println("ATA");
-    delay(5000);
-    SMSGateway.println("ATH");
-  }
-
   if (data.indexOf("+CLIP") > 0) {
     Serial.println("Incoming call from: " + getValue(data, '"', 1));
+  }
+
+  if (data.indexOf("RING") > 0) {
+    SMSGateway.println("ATA");
+    mario.play();
+    SMSGateway.println("ATH");
   }
 
   Serial.println(data);
