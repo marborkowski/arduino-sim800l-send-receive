@@ -109,7 +109,6 @@
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
 
-#define melodyPin 3
 //Mario main theme melody
 
 int song = 0;
@@ -217,7 +216,7 @@ int underworld_tempo[] = {
 Mario::Mario(int pin)
 {
   pinMode(pin, OUTPUT);
-  _pin = 3;
+  _pin = pin;
 }
 
 void Mario::sing(int s) {
@@ -232,7 +231,7 @@ void Mario::sing(int s) {
       //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
       int noteDuration = 1000 / underworld_tempo[thisNote];
 
-      Mario::buzz(melodyPin, underworld_melody[thisNote], noteDuration);
+      Mario::buzz(_pin, underworld_melody[thisNote], noteDuration);
 
       // to distinguish the notes, set a minimum time between them.
       // the note's duration + 30% seems to work well:
@@ -240,7 +239,7 @@ void Mario::sing(int s) {
       delay(pauseBetweenNotes);
 
       // stop the tone playing:
-      Mario::buzz(melodyPin, 0, noteDuration);
+      Mario::buzz(_pin, 0, noteDuration);
 
     }
 
@@ -254,7 +253,7 @@ void Mario::sing(int s) {
       //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
       int noteDuration = 1000 / tempo[thisNote];
 
-      Mario::buzz(melodyPin, melody[thisNote], noteDuration);
+      Mario::buzz(_pin, melody[thisNote], noteDuration);
 
       // to distinguish the notes, set a minimum time between them.
       // the note's duration + 30% seems to work well:
@@ -262,7 +261,7 @@ void Mario::sing(int s) {
       delay(pauseBetweenNotes);
 
       // stop the tone playing:
-      Mario::buzz(melodyPin, 0, noteDuration);
+      Mario::buzz(_pin, 0, noteDuration);
 
     }
   }
