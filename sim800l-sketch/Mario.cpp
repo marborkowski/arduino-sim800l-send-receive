@@ -1,6 +1,9 @@
 #include "Arduino.h"
 #include "Mario.h"
-
+/**
+ * CPP implementation (porting to the Arduino library)
+ * by Marcin Borkowski <marborkowski@gmail.com>
+ */
 
 /*
   Arduino Mario Bros Tunes
