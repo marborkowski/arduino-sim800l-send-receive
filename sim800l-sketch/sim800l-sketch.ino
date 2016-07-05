@@ -99,7 +99,8 @@ void filterIncomingData(String data) {
 
   if (data.indexOf("RING") > 0) {
     SMSGateway.println("ATA");
-    mario.play();
+    //mario.play();
+    delay(10000);
     SMSGateway.println("ATH");
   }
 
